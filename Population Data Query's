@@ -1,35 +1,49 @@
--- Finding which years we have data for.--
+--Returns the total number of African country's.--
 
-SELECT DISTINCT year from population_years;
+select count(*) as 'no. afri contr' from countries 
+where continent = 'Africa';
 
--- Finding the highest population of Gabon.--
+-- Finds the total population of Oceania in 2005.--
 
-SELECT population from population_years
-where country = 'Gabon'
-ORDER BY population DESC
-limit 1;
+select sum(population) from population_years
+join countries
+on countries.id = population_years.country_id
+where countries.continent = 'Oceania'
+and population_years.year = 2005;
 
- -- The smallest 10 populations in 2005.--
- 
- select country from population_years
- where year = 2005 
- order by population asc 
- limit 10;
- 
- --List of country's whose population was greater than 100 million in 2010.--
- 
- select country from population_years 
- where year = 2010
- and population > 100;
- 
- --Country's with 'islands' in their name.--
- 
-select distinct country from population_years
-where country like '%Islands%';
---contrys with islands in their name
+-- The average population of country's from South America in 2003.--
 
---Indonesia's population in 2000 and 2010.--
+select avg(population) from population_years
+join countries
+on countries.id = population_years.country_id
+where continent = 'South America'
+and year = 2003;
 
-select * from population_years
-where country = 'Indonesia' and year = 2000
-or country = 'Indonesia' and year = 2010;
+-- The country with the smallest population in 2007.--
+
+select min(population), countries.name
+from population_years
+join countries
+on countries.id = population_years.country_id
+where year = 2007;
+
+-- The average population of Poland over the given time records.--
+
+select avg(population) from population_years 
+join countries
+on countries.id = population_years.country_id
+where name = 'Poland';
+
+-- The number of country's containing the substring 'The' in the name.--
+
+select count(*) from countries
+where name like '%The%';
+
+-- The sum of all people on each continent during 2010.-- 
+
+select sum(population) , countries.continent
+from population_years
+join countries 
+on countries.id = population_years.country_id
+where population_years.year = 2010
+group by continent;
