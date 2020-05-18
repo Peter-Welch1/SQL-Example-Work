@@ -1,0 +1,40 @@
+-- Examining the survey table.--
+
+select * from survey
+limit 10;
+ 
+-- Viewing the number of survey answers for each question.-- 
+ 
+select question, count(*) from survey
+group by question; 
+
+--Examining the other tables.--
+
+select * from quiz
+limit 5;
+select * from home_try_on
+limit 5;
+select * from purchase
+limit 5;
+
+-- Forming a table with columns for user_id, is_home_try_on returning true or false if they where a home try on customer,
+   the number_of_pairs recieved and is_purchase returning True or False if they compleated the purchase.--
+
+select distinct quiz.user_id,
+case
+when home_try_on.user_id is not null 
+then 'True'
+else 'False'
+end as 'is_home_try_on',
+home_try_on.number_of_pairs,
+case
+when purchase.user_id is not null
+then 'True'
+else 'False'
+end as 'is_purchase'
+from quiz 
+left join home_try_on
+on quiz.user_id = home_try_on.user_id
+left join purchase 
+on purchase.user_id = home_try_on.user_id
+limit 10;
