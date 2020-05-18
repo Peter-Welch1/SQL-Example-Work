@@ -1,0 +1,59 @@
+-- Finding the number of distinct utm campaigns, utm sources and which campaign is linked to which source.--
+
+select count(distinct utm_campaign)
+from page_visits;
+select count(distinct utm_source)
+from page_visits;
+select distinct utm_campaign, utm_source
+from page_visits;
+
+-- Showing which different pages are on the website.-- 
+
+select distinct page_name from page_visits;
+
+-- The number of first and last touches each campaign is responsible for.-- 
+
+WITH first_touch AS (
+    SELECT user_id,
+        MIN(timestamp) as first_touch_at
+    FROM page_visits
+    GROUP BY user_id)
+SELECT utm_campaign, count(*)
+FROM first_touch ft
+JOIN page_visits pv
+    ON ft.user_id = pv.user_id
+    AND ft.first_touch_at = pv.timestamp
+    group by utm_campaign;
+    
+    WITH last_touch AS (
+    SELECT user_id,
+        MAX(timestamp) as last_touch_at
+    FROM page_visits
+    GROUP BY user_id)
+SELECT utm_campaign, count(*)
+FROM last_touch lt
+JOIN page_visits pv
+    ON lt.user_id = pv.user_id
+    AND lt.last_touch_at = pv.timestamp
+    group by utm_campaign;
+    
+-- Returning a count of total purchases.--
+    
+select count(distinct user_id) as 'total_purchase' from page_visits
+where page_name = '4 - purchase';
+
+-- Finding the count of purchases that each of the different campaigns resulted in.--
+
+WITH last_touch AS (
+    SELECT user_id,
+        MAX(timestamp) as last_touch_at
+    FROM page_visits
+      where page_name = '4 - purchase'
+    GROUP BY user_id)
+SELECT utm_campaign, count(*)
+FROM last_touch lt
+JOIN page_visits pv
+    ON lt.user_id = pv.user_id
+    AND lt.last_touch_at = pv.timestamp
+    group by utm_campaign
+    order by 2 desc;
