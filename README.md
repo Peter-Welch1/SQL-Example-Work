@@ -7,3 +7,4 @@ Calculating Churn Rate: In this project I looked into the churn rates of two dif
 
 Marketing Attribution Query: For this project, I looked into which marketing campaign was most effective in getting customers to purchase. The information could be used to aid the decision of which campaigns are effective and should continue to be invested in, and which should be cancelled.
 
+Population Data Query's: Some simple query's on a population data table.
