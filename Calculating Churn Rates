@@ -1,3 +1,5 @@
+-- Creating a temporary table, 'months', with the selected dates for each month that I was interested in checking churn rates for.-- 
+
 with months as 
 (select 
 '2017-01-01' as first_day,
@@ -11,9 +13,14 @@ select
 '2017-03-01' as first_day,
 '2017-03-31' as last_day), 
 
+-- Creating a temporary table, 'cross_join', from the subscriptions and months tables.--
+
 cross_join as 
 (select * from subscriptions
 cross join months), 
+
+-- Creating a temporary table, 'status', with columns id, first_day and 2 cases returning a binary if the user
+   is active for the '87' and '30' test --
 
 status as 
 (select 
@@ -42,6 +49,8 @@ status as
  from cross_join
 ),
 
+-- Creating a status_aggregate table showing the sum of active and cancelled users for each month.--
+
 status_aggregate as 
 (select 
  month, 
@@ -52,6 +61,7 @@ sum(is_canceled_87) as sum_canceled_87,
  from status
 group by month)
 
+-- Finally, we can run the query to calculate the percentage churn rate for test group every month.--
 select month,
 100 * sum_canceled_87/sum_active_87 as churn_rate_87,
 100 * sum_canceled_30/sum_active_30 as churn_rate_30
