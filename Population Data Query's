@@ -1,0 +1,35 @@
+-- Finding which years we have data for.--
+
+SELECT DISTINCT year from population_years;
+
+-- Finding the highest population of Gabon.--
+
+SELECT population from population_years
+where country = 'Gabon'
+ORDER BY population DESC
+limit 1;
+
+ -- The smallest 10 populations in 2005.--
+ 
+ select country from population_years
+ where year = 2005 
+ order by population asc 
+ limit 10;
+ 
+ --List of country's whose population was greater than 100 million in 2010.--
+ 
+ select country from population_years 
+ where year = 2010
+ and population > 100;
+ 
+ --Country's with 'islands' in their name.--
+ 
+select distinct country from population_years
+where country like '%Islands%';
+--contrys with islands in their name
+
+--Indonesia's population in 2000 and 2010.--
+
+select * from population_years
+where country = 'Indonesia' and year = 2000
+or country = 'Indonesia' and year = 2010;
